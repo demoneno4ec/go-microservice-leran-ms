@@ -3,12 +3,11 @@ package database
 import (
 	"fmt"
 	"github.com/demoneno4ec/go-microservice-leran-ms/models"
-	"log"
-	"os"
-
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"log"
+	"os"
 )
 
 type Dbinstance struct {
