@@ -41,8 +41,8 @@ func ConnectDb() {
 	db.Logger = logger.Default.LogMode(logger.Info)
 
 	// TODO Спорно, это вроде миграции а не коннект к базе, т.е. миграции должны катиться, до инициализации конекта с бд.
-	// TODO Надо будет посмотреть на это пробрасывание зависимостей
 	log.Println("running migrations")
+	// TODO Надо будет посмотреть на это пробрасывание зависимостей
 	db.AutoMigrate(&models.Fact{})
 
 	DB = Dbinstance{
