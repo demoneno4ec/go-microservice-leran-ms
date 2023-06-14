@@ -22,3 +22,10 @@ func Create(c *fiber.Ctx) error {
 
 	return c.Status(200).JSON(fact)
 }
+
+func ListFacts(c *fiber.Ctx) error {
+	var facts []models.Fact
+	database.DB.Db.Find(&facts)
+
+	return c.Status(200).JSON(facts)
+}
