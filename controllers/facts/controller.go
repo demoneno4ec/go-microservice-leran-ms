@@ -1,6 +1,7 @@
 package facts
 
 import (
+	"fmt"
 	"github.com/demoneno4ec/go-microservice-leran-ms/database"
 	"github.com/demoneno4ec/go-microservice-leran-ms/models"
 	"github.com/gofiber/fiber/v2"
@@ -39,9 +40,38 @@ func Show(c *fiber.Ctx) error {
 	if result.Error != nil {
 		errorResponse := errorResponse{}
 
-		errorResponse.Message = "test"
+		fmt.Println("test log 3")
+		errorResponse.Message = "test 3"
 		return c.Status(fiber.StatusNotFound).JSON(errorResponse)
 	}
+
+	return c.Status(fiber.StatusOK).JSON(fact)
+}
+
+func Update(c *fiber.Ctx) error {
+	fact := new(models.Fact)
+	id := c.Params("id")
+
+	// Parsing the request body
+	if err := c.BodyParser(fact); err != nil {
+		errorResponse := errorResponse{}
+
+		errorResponse.Message = "test 2"
+		return c.Status(fiber.StatusServiceUnavailable).JSON(errorResponse)
+	}
+
+	result := database.DB.Db.Where("id = ?", id).First(&fact)
+	if result.Error != nil {
+		errorResponse := errorResponse{}
+
+		fmt.Println("test log 3")
+		errorResponse.Message = "test 3"
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"message": "not updated",
+		})
+	}
+
+	result.Updates(fact)
 
 	return c.Status(fiber.StatusOK).JSON(fact)
 }
