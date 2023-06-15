@@ -5,5 +5,6 @@
 - добавить ci yaml
 - посмотреть на практики работы с бд
 - посмотреть на faber/middleware
+- common/response
 
 [Продолжение](https://divrhino.com/articles/rest-api-docker-go-fiber-from-scratch/#routes--endpoints)
