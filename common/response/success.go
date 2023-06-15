@@ -3,8 +3,8 @@ package response
 import "github.com/gofiber/fiber/v2"
 
 type success struct {
-	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
+	Status string      `json:"status"`
+	Data   interface{} `json:"data"`
 }
 
 func Success(c *fiber.Ctx, data interface{}) error {
@@ -15,6 +15,6 @@ func Success(c *fiber.Ctx, data interface{}) error {
 
 func EmptySuccess(c *fiber.Ctx) error {
 	response := success{}
-	response.Message = "success"
+	response.Status = "success"
 	return c.Status(fiber.StatusOK).JSON(response)
 }

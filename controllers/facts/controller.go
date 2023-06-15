@@ -15,9 +15,7 @@ type errorResponse struct {
 func Create(c *fiber.Ctx) error {
 	fact := new(models.Fact)
 	if err := c.BodyParser(fact); err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": err.Error(),
-		})
+		return response.Error(c, fiber.StatusInternalServerError, "Недостаточно данных")
 	}
 
 	database.DB.Db.Create(&fact)
@@ -38,10 +36,7 @@ func Show(c *fiber.Ctx) error {
 
 	result := database.DB.Db.Where("id = ?", id).First(&fact)
 	if result.Error != nil {
-		errorResponse := errorResponse{}
-
-		errorResponse.Message = "test 3"
-		return c.Status(fiber.StatusNotFound).JSON(errorResponse)
+		return response.Error(c, fiber.StatusNotFound, "Факт не найден")
 	}
 
 	return response.Success(c, fact)
@@ -53,20 +48,12 @@ func Update(c *fiber.Ctx) error {
 
 	// Parsing the request body
 	if err := c.BodyParser(fact); err != nil {
-		errorResponse := errorResponse{}
-
-		errorResponse.Message = "test 2"
-		return c.Status(fiber.StatusServiceUnavailable).JSON(errorResponse)
+		return response.Error(c, fiber.StatusServiceUnavailable, "Недостаточно данных")
 	}
 
 	result := database.DB.Db.Where("id = ?", id).First(&fact)
 	if result.Error != nil {
-		errorResponse := errorResponse{}
-
-		errorResponse.Message = "test 3"
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"message": "not updated",
-		})
+		return response.Error(c, fiber.StatusNotFound, "Факт не найден")
 	}
 
 	result.Updates(fact)
@@ -80,22 +67,10 @@ func Delete(c *fiber.Ctx) error {
 
 	result := database.DB.Db.Where("id = ?", id).First(&fact)
 	if result.Error != nil {
-		errorResponse := errorResponse{}
-
-		errorResponse.Message = "test 3"
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"message": "not found",
-		})
+		return response.Error(c, fiber.StatusNotFound, "Факт не найден")
 	}
 
 	database.DB.Db.Where("id = ?", id).Delete(&fact)
 
 	return response.EmptySuccess(c)
-}
-
-func NotFound(c *fiber.Ctx) error {
-	errorResponse := errorResponse{}
-
-	errorResponse.Message = "test"
-	return c.Status(fiber.StatusNotFound).JSON(errorResponse)
 }
