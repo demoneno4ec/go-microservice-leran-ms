@@ -1,6 +1,7 @@
 package facts
 
 import (
+	"github.com/demoneno4ec/go-microservice-leran-ms/common/response"
 	"github.com/demoneno4ec/go-microservice-leran-ms/database"
 	"github.com/demoneno4ec/go-microservice-leran-ms/models"
 	"github.com/gofiber/fiber/v2"
@@ -21,14 +22,14 @@ func Create(c *fiber.Ctx) error {
 
 	database.DB.Db.Create(&fact)
 
-	return c.Status(fiber.StatusOK).JSON(fact)
+	return response.EmptySuccess(c)
 }
 
 func ListFacts(c *fiber.Ctx) error {
 	var facts []models.Fact
 	database.DB.Db.Find(&facts)
 
-	return c.Status(fiber.StatusOK).JSON(facts)
+	return response.Success(c, facts)
 }
 
 func Show(c *fiber.Ctx) error {
@@ -43,7 +44,7 @@ func Show(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusNotFound).JSON(errorResponse)
 	}
 
-	return c.Status(fiber.StatusOK).JSON(fact)
+	return response.Success(c, fact)
 }
 
 func Update(c *fiber.Ctx) error {
@@ -70,7 +71,7 @@ func Update(c *fiber.Ctx) error {
 
 	result.Updates(fact)
 
-	return c.Status(fiber.StatusOK).JSON(fact)
+	return response.EmptySuccess(c)
 }
 
 func Delete(c *fiber.Ctx) error {
@@ -89,9 +90,7 @@ func Delete(c *fiber.Ctx) error {
 
 	database.DB.Db.Where("id = ?", id).Delete(&fact)
 
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"message": "deleted",
-	})
+	return response.EmptySuccess(c)
 }
 
 func NotFound(c *fiber.Ctx) error {
