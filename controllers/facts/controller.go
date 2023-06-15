@@ -7,11 +7,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// todo вынести это в common/response
-type errorResponse struct {
-	Message string `json:"message"`
-}
-
 func Create(c *fiber.Ctx) error {
 	fact := new(models.Fact)
 	if err := c.BodyParser(fact); err != nil {
